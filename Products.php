@@ -71,7 +71,7 @@ class Products {
     public static function getLimit() {
         $limit = isset($_GET['limit']) ? $_GET['limit'] : null;
 
-        if($limit > 20 || $limit < 1) {
+        if($limit > 20) {
             self::$errors[] = "Can't show more than 20 products.";
             echo "Can't show more than 20 or less then 1 products.";
             die();
