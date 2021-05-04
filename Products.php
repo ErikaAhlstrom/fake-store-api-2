@@ -12,44 +12,25 @@ class Products {
         // Kolla att query string är valid
         self::checkQuery();
         
-        $filteredDataCategory = array();
-        $filteredDataLimit = array();
+        // $filteredDataCategory = array();
+        // $filteredDataLimit = array();
         
-        if(self::$limit && self::$category) {
-            foreach (self::$data as $product) {
-                if ($product['category'] == self::$category) {
-                    array_push($filteredDataCategory, $product);
-                }
-            }
-
-            if(count($filteredDataCategory) < self::$limit) {
-                $error = "There are only " . count($filteredDataCategory) . " items in that category.";
-                echo json_encode($error, JSON_UNESCAPED_UNICODE);
-                die();
-            }
-
-            shuffle($filteredDataCategory);
-
-            for ($i = 0; $i < self::$limit; $i++) {
-                array_push($filteredDataLimit, $filteredDataCategory[$i]);
-            }
-            echo json_encode($filteredDataLimit, JSON_UNESCAPED_UNICODE);
-        }
-        else if (!self::$limit && self::$category) {
+        
+   /*      if (!self::$limit && self::$category) {
             foreach (self::$data as $product) {
                 if ($product['category'] == self::$category) {
                     array_push($filteredDataCategory, $product);
                 }
             }
             echo json_encode($filteredDataCategory, JSON_UNESCAPED_UNICODE);
-        }
-        else if (self::$limit && !self::$category) {
+        } */
+/*         if (self::$limit && !self::$category) {
             shuffle(self::$data);
             for($i = 0; $i < self::$limit; $i++) {
                 array_push($filteredDataLimit, self::$data[$i]);
             }
             echo json_encode($filteredDataLimit, JSON_UNESCAPED_UNICODE);
-        }
+        } */
 
     }
 
@@ -79,17 +60,24 @@ class Products {
             $error = "The key/keyes are not valid.";
             echo json_encode($error, JSON_UNESCAPED_UNICODE);
             die();
-        } else {
+        } else if(count($_GET) == 2 &&
+            array_key_exists('show', $_GET) &&
+            array_key_exists('category', $_GET)
+        ) {
             self::setLimit();
             self::setCategory();
+            self::renderLimitCategory();
         }
 
         if (count($_GET) == 1) {
+            // echo "1 query";
             if (array_key_exists('show', $_GET)) {
                 self::setLimit();
+                self::renderLimit();
             }
             else if(array_key_exists('category', $_GET)) {
                 self::setCategory();
+                self::renderCategory();
             }
             else {
                 $error = "The key is not valid.";
@@ -99,8 +87,55 @@ class Products {
         }
     }
 
+    public static function renderLimit() {
+        
+        $filteredDataLimit = array();
+
+        shuffle(self::$data);
+
+        for ($i = 0; $i < self::$limit; $i++) {
+            array_push($filteredDataLimit, self::$data[$i]);
+        }
+        echo json_encode($filteredDataLimit, JSON_UNESCAPED_UNICODE);
+    }
+
+    public static function renderCategory() {
+        $filteredDataCategory = array();
+
+        foreach (self::$data as $product) {
+            if ($product['category'] == self::$category) {
+                array_push($filteredDataCategory, $product);
+            }
+        }
+        echo json_encode($filteredDataCategory, JSON_UNESCAPED_UNICODE);
+    }
+
+    public static function renderLimitCategory() {
+        $filteredDataCategory = array();
+        $filteredDataLimit = array();
+        
+        foreach (self::$data as $product) {
+            if ($product['category'] == self::$category) {
+                array_push($filteredDataCategory, $product);
+            }
+        }
+
+        if (count($filteredDataCategory) < self::$limit) {
+            $error = "There are only " . count($filteredDataCategory) . " items in that category.";
+            echo json_encode($error, JSON_UNESCAPED_UNICODE);
+            die();
+        }
+
+        shuffle($filteredDataCategory);
+
+        for ($i = 0; $i < self::$limit; $i++) {
+            array_push($filteredDataLimit, $filteredDataCategory[$i]);
+        }
+        echo json_encode($filteredDataLimit, JSON_UNESCAPED_UNICODE);
+    }
+
     public static function setLimit() {
-        $limit = isset($_GET['show']) ? $_GET['show'] : null;
+        $limit = htmlspecialchars($_GET['show']);
 
         // Skicka error om value är större än 20
         if(self::$limit > 20) {
