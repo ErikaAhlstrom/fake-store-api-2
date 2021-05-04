@@ -125,7 +125,7 @@ class Products {
         $limit = htmlspecialchars($_GET['show']);
 
         // Skicka error om value är större än 20
-        if (self::$limit > 20) {
+        if ($limit > 20) {
             $error = "Can't show more than 20 products.";
             echo json_encode($error, JSON_UNESCAPED_UNICODE);
             die();
@@ -141,7 +141,6 @@ class Products {
     }
     // felsöker och sätter inkommande category query
     public static function setCategory() {
-        // $category = isset($_GET['category']) ? $_GET['category'] : null;
         $category = htmlspecialchars($_GET['category']);
 
         // Skicka error om category är ogiltig
