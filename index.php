@@ -13,9 +13,6 @@ header("Referrer-Policy: no-referrer");
 
 Products::main();
 
-
-// $limit = isset($_GET["limit"]) ? $_GET["limit"] : 10;
-
-// shuffle($names);
+?>
 
 
