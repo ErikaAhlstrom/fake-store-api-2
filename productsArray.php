@@ -66,7 +66,7 @@ $products = array(
     ),
     array(
         "id" => 9,
-        "title" => "shoes",
+        "title" => "The Clog Sandal",
         "price" => 946,
         "description" => "A clog sandal that’s actually comfortable. Comprised of a premium leather upper and a natural wood outsole, the Clog Sandal features a classic criss-cross design, an adjustable ankle strap, a walkable 3\" heel, and a sleek, minimal look (no staples here). Plus, the hollowed heel makes it noticeably lighter than other clogs, and the cushioned insole means you can walk tall all day long.",
         "category" => "shoes",
