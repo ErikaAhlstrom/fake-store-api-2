@@ -1,5 +1,5 @@
 <?php
-include 'Products.php';
+include 'API.php';
 
 /**
  * Fake Store API
@@ -11,7 +11,7 @@ header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 header("Referrer-Policy: no-referrer");
 
-Products::main();
+API::main();
 
 ?>
 
